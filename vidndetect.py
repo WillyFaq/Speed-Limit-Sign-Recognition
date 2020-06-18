@@ -11,12 +11,12 @@ print("Tensorflow:", tf.__version__)
 print("OpenCV:", cv.__version__)
 CLASS = ['30km/h','40km/h','Not Speed Sign']
 aud_path = './Audio/'
-file_path = './Test/'
+file_path = './new/'
 files = os.listdir(file_path)
 count = len(files)
 n = 0
 totalframe = 0
-cap =cv.VideoCapture('siang2.mp4')
+cap =cv.VideoCapture('siang1.mp4')
 hasil_class = ''
 
 def load_img(path):
@@ -101,8 +101,10 @@ while(True):
             print("\n\n")
             if (tmp_class != 'Not Speed Sign' and hasil_class != tmp_class):
                 hasil_class = tmp_class
-                if (np.argmax(predictions[i])==0): playsound(aud_path + '30.mp3')
-                elif (np.argmax(predictions[i])==1): playsound(aud_path + '40.mp3')
+                class_id = np.argmax(predictions[i]) 
+                percen = np.max(predictions[i])
+                if (class_id==0 and percen>0.4): playsound(aud_path + '30.mp3')
+                elif (class_id==1 and percen>0.4): playsound(aud_path + '40.mp3')
     else:
         dst = cv.resize(dst, (1280,720))
         cv.imshow('frame', dst)

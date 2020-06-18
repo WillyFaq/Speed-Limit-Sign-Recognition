@@ -4,8 +4,7 @@ import numpy as np
 def process_img(img):
 	imgs = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 	malam = 0
-	
-	font = cv.FONT_HERSHEY_SIMPLEX
+	dst1 = img.copy()
 
 	avg_color_per_row = np.average(img, axis=0)
 	avg_color = np.average(avg_color_per_row, axis=0)
@@ -19,7 +18,6 @@ def process_img(img):
 		cl1 = clahe.apply(imgs)
 		imgb = cv.GaussianBlur(cl1, (5, 5), 0)
 		# print("malam")
-		#txt = cv.putText(imgb, "CLASS: " , (20, 35), font, 0.75, (0, 0, 255), 2, cv.LINE_AA)
 		# dst = cv.resize(imgb, (720,480))
 		# cv.putText(dst, "Malam",(50, 50), cv.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),2,cv.LINE_AA)
 		# cv.putText(dst, "avg : "+str(avg_color1),(50, 100), cv.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),2,cv.LINE_AA)
@@ -36,20 +34,26 @@ def process_img(img):
 		# cv.putText(dst, "avg : "+str(avg_color1),(50, 100), cv.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),2,cv.LINE_AA)
 		# showInMovedWindow('siang', dst, 720, 0)
 
-	circles = cv.HoughCircles (imgb, cv.HOUGH_GRADIENT, 1, 300,
+	circles = cv.HoughCircles (imgb, cv.HOUGH_GRADIENT, 1, 200,
                 param1 = 80,
                 param2 = 50,
-                minRadius = 25,
+                minRadius = 30,
                 maxRadius = 60)
+	img_circ = []
+	i = 0
 	if circles is not None:
 		circles = np.uint16(np.around(circles))
 		# cc = circles
 		# for i in cc[0,:]:
-		# 	cv.circle(img,(i[0],i[1]),i[2],(0,255,0),2)
-		# dst = cv.resize(img, (720,480))
-		# showInMovedWindow('circle', dst, 720, 240)
+		# 	cv.circle(imgb,(i[0],i[1]),i[2],(0,255,0),2)
+		
+		# imgb = cv.resize(imgb, (200,200)) 
+		# showInMovedWindow('circle', imgb, 10, 490)
+		# #dst = cv.resize(img, (720,480))
+		# i = i + 1
 		return circles
 	else: return None    
+
 
 def showInMovedWindow(winname, img, x, y):
     cv.namedWindow(winname)        # Create a named window
